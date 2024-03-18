@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 import React from 'react'
 import axios from 'axios'
 import { useQuery } from "@tanstack/react-query";
@@ -19,8 +19,15 @@ function posts() {
     );
     return (
       <>
-      {data !==undefined && data?.map((item: { id: React.Key ; title: string  })=>(
-         <h2 key={item.id}>{item.title}</h2>
+      {data !==undefined && data?.map((item: { id: number ; title: string  })=>(
+         <h2 key={item.id}>
+            <Link to="/post/$id" 
+            params={{id:item.id.toString()}}
+            >
+            {item.title}
+            </Link>
+            
+            </h2>
       ))}
        
       </>

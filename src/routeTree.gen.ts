@@ -19,6 +19,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as PokemonIndexImport } from './routes/pokemon/index'
 import { Route as PokemonIdImport } from './routes/pokemon/$id'
 import { Route as AuthenticatedPostsImport } from './routes/_authenticated/posts'
+import { Route as AuthenticatedPostIdImport } from './routes/_authenticated/post/$id'
 
 // Create/Update Routes
 
@@ -62,6 +63,11 @@ const AuthenticatedPostsRoute = AuthenticatedPostsImport.update({
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
+const AuthenticatedPostIdRoute = AuthenticatedPostIdImport.update({
+  path: '/post/$id',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -98,6 +104,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PokemonIndexImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated/post/$id': {
+      preLoaderRoute: typeof AuthenticatedPostIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
   }
 }
 
@@ -105,7 +115,10 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  AuthenticatedRoute.addChildren([AuthenticatedPostsRoute]),
+  AuthenticatedRoute.addChildren([
+    AuthenticatedPostsRoute,
+    AuthenticatedPostIdRoute,
+  ]),
   LoginRoute,
   ProfileRoute,
   SearchRoute,
