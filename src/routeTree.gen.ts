@@ -14,12 +14,18 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as SearchImport } from './routes/search'
 import { Route as ProfileImport } from './routes/profile'
 import { Route as LoginImport } from './routes/login'
+import { Route as LayoutImport } from './routes/_layout'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as PokemonIndexImport } from './routes/pokemon/index'
 import { Route as PokemonIdImport } from './routes/pokemon/$id'
+import { Route as LayoutAboutImport } from './routes/_layout/about'
 import { Route as AuthenticatedPostsImport } from './routes/_authenticated/posts'
+import { Route as AuthenticatedDashboardImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDashboardIndexImport } from './routes/_authenticated/dashboard.index'
 import { Route as AuthenticatedPostIdImport } from './routes/_authenticated/post/$id'
+import { Route as AuthenticatedDashboardUsersIndexImport } from './routes/_authenticated/dashboard.users.index'
+import { Route as AuthenticatedDashboardUsersIdImport } from './routes/_authenticated/dashboard.users.$id'
 
 // Create/Update Routes
 
@@ -35,6 +41,11 @@ const ProfileRoute = ProfileImport.update({
 
 const LoginRoute = LoginImport.update({
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LayoutRoute = LayoutImport.update({
+  id: '/_layout',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -58,15 +69,43 @@ const PokemonIdRoute = PokemonIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const LayoutAboutRoute = LayoutAboutImport.update({
+  path: '/about',
+  getParentRoute: () => LayoutRoute,
+} as any)
+
 const AuthenticatedPostsRoute = AuthenticatedPostsImport.update({
   path: '/posts',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
+const AuthenticatedDashboardRoute = AuthenticatedDashboardImport.update({
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedDashboardIndexRoute =
+  AuthenticatedDashboardIndexImport.update({
+    path: '/',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+
 const AuthenticatedPostIdRoute = AuthenticatedPostIdImport.update({
   path: '/post/$id',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+
+const AuthenticatedDashboardUsersIndexRoute =
+  AuthenticatedDashboardUsersIndexImport.update({
+    path: '/users/',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+
+const AuthenticatedDashboardUsersIdRoute =
+  AuthenticatedDashboardUsersIdImport.update({
+    path: '/users/$id',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -78,6 +117,10 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated': {
       preLoaderRoute: typeof AuthenticatedImport
+      parentRoute: typeof rootRoute
+    }
+    '/_layout': {
+      preLoaderRoute: typeof LayoutImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -92,9 +135,17 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated/dashboard': {
+      preLoaderRoute: typeof AuthenticatedDashboardImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/posts': {
       preLoaderRoute: typeof AuthenticatedPostsImport
       parentRoute: typeof AuthenticatedImport
+    }
+    '/_layout/about': {
+      preLoaderRoute: typeof LayoutAboutImport
+      parentRoute: typeof LayoutImport
     }
     '/pokemon/$id': {
       preLoaderRoute: typeof PokemonIdImport
@@ -108,6 +159,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPostIdImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/dashboard/': {
+      preLoaderRoute: typeof AuthenticatedDashboardIndexImport
+      parentRoute: typeof AuthenticatedDashboardImport
+    }
+    '/_authenticated/dashboard/users/$id': {
+      preLoaderRoute: typeof AuthenticatedDashboardUsersIdImport
+      parentRoute: typeof AuthenticatedDashboardImport
+    }
+    '/_authenticated/dashboard/users/': {
+      preLoaderRoute: typeof AuthenticatedDashboardUsersIndexImport
+      parentRoute: typeof AuthenticatedDashboardImport
+    }
   }
 }
 
@@ -116,9 +179,15 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   AuthenticatedRoute.addChildren([
+    AuthenticatedDashboardRoute.addChildren([
+      AuthenticatedDashboardIndexRoute,
+      AuthenticatedDashboardUsersIdRoute,
+      AuthenticatedDashboardUsersIndexRoute,
+    ]),
     AuthenticatedPostsRoute,
     AuthenticatedPostIdRoute,
   ]),
+  LayoutRoute.addChildren([LayoutAboutRoute]),
   LoginRoute,
   ProfileRoute,
   SearchRoute,
