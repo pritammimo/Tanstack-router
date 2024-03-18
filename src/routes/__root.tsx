@@ -44,11 +44,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
             Login
           </Link>
         </li>
-        {/* <li>
+        <li>
           <Link to="/dashboard" activeProps={activeProps}>
             Dashboard
           </Link>
-        </li> */}
+        </li>
         {/* <li>
           <Link to="/settings" activeProps={activeProps}>
             Settings
