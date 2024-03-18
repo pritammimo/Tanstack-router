@@ -18,7 +18,7 @@ import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as PokemonIndexImport } from './routes/pokemon/index'
 import { Route as PokemonIdImport } from './routes/pokemon/$id'
-import { Route as AuthenticatedDashboardImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedPostsImport } from './routes/_authenticated/posts'
 
 // Create/Update Routes
 
@@ -57,8 +57,8 @@ const PokemonIdRoute = PokemonIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthenticatedDashboardRoute = AuthenticatedDashboardImport.update({
-  path: '/dashboard',
+const AuthenticatedPostsRoute = AuthenticatedPostsImport.update({
+  path: '/posts',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
@@ -86,8 +86,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchImport
       parentRoute: typeof rootRoute
     }
-    '/_authenticated/dashboard': {
-      preLoaderRoute: typeof AuthenticatedDashboardImport
+    '/_authenticated/posts': {
+      preLoaderRoute: typeof AuthenticatedPostsImport
       parentRoute: typeof AuthenticatedImport
     }
     '/pokemon/$id': {
@@ -105,7 +105,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
-  AuthenticatedRoute.addChildren([AuthenticatedDashboardRoute]),
+  AuthenticatedRoute.addChildren([AuthenticatedPostsRoute]),
   LoginRoute,
   ProfileRoute,
   SearchRoute,

@@ -45,8 +45,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
           </Link>
         </li>
         <li>
-          <Link to="/dashboard" activeProps={activeProps}>
-            Dashboard
+          <Link to="/posts" activeProps={activeProps}>
+            posts
           </Link>
         </li>
         {/* <li>
