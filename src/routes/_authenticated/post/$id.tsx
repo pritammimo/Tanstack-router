@@ -23,7 +23,7 @@ export const Route = createFileRoute("/_authenticated/post/$id")({
   console.log(id,postdetails);
   return (
     <div>
-      {postdetails.title} : {postdetails.body}
+      {postdetails?.title} : {postdetails?.body}
     </div>
   )
 }
