@@ -23,7 +23,9 @@ import { Route as LayoutAboutImport } from './routes/_layout/about'
 import { Route as AuthenticatedPostsImport } from './routes/_authenticated/posts'
 import { Route as AuthenticatedDashboardImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDashboardIndexImport } from './routes/_authenticated/dashboard.index'
+import { Route as AuthenticatedBlogsIndexImport } from './routes/_authenticated/blogs/index'
 import { Route as AuthenticatedPostIdImport } from './routes/_authenticated/post/$id'
+import { Route as AuthenticatedBlogsIdImport } from './routes/_authenticated/blogs/$id'
 import { Route as AuthenticatedDashboardUsersIndexImport } from './routes/_authenticated/dashboard.users.index'
 import { Route as AuthenticatedDashboardUsersIdImport } from './routes/_authenticated/dashboard.users.$id'
 
@@ -90,8 +92,18 @@ const AuthenticatedDashboardIndexRoute =
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
 
+const AuthenticatedBlogsIndexRoute = AuthenticatedBlogsIndexImport.update({
+  path: '/blogs/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
 const AuthenticatedPostIdRoute = AuthenticatedPostIdImport.update({
   path: '/post/$id',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedBlogsIdRoute = AuthenticatedBlogsIdImport.update({
+  path: '/blogs/$id',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 
@@ -155,8 +167,16 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PokemonIndexImport
       parentRoute: typeof rootRoute
     }
+    '/_authenticated/blogs/$id': {
+      preLoaderRoute: typeof AuthenticatedBlogsIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/post/$id': {
       preLoaderRoute: typeof AuthenticatedPostIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/blogs/': {
+      preLoaderRoute: typeof AuthenticatedBlogsIndexImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/dashboard/': {
@@ -185,7 +205,9 @@ export const routeTree = rootRoute.addChildren([
       AuthenticatedDashboardUsersIndexRoute,
     ]),
     AuthenticatedPostsRoute,
+    AuthenticatedBlogsIdRoute,
     AuthenticatedPostIdRoute,
+    AuthenticatedBlogsIndexRoute,
   ]),
   LayoutRoute.addChildren([LayoutAboutRoute]),
   LoginRoute,

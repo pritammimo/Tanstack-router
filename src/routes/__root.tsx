@@ -4,6 +4,7 @@ import {
   createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { AuthContext } from "../hooks/useAuth";
+import { QueryClient } from "@tanstack/react-query";
 const activeProps = {
   style: {
     fontWeight: "bold",
@@ -12,6 +13,7 @@ const activeProps = {
 
 type RouterContext = {
   authentication: AuthContext;
+  queryClient: QueryClient
 };
 
 export const Route = createRootRouteWithContext<RouterContext>()({
